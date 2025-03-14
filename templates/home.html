@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Blood Group Detection</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      color: #333;
+      background: url('images/PRINT1.jpg') no-repeat center center fixed;
+      background-size: cover; /* Ensures the image covers the entire background */
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Left Panel */
+    .left-panel {
+      width: 250px;
+      background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+      color: #333;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.4s ease;
+    }
+
+    .left-panel.collapsed {
+      transform: translateX(-250px);
+    }
+
+    .left-panel h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: #ff7e5f;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .left-panel ul {
+      list-style: none;
+    }
+
+    .left-panel ul li {
+      margin: 1.2rem 0;
+    }
+
+    .left-panel ul li a {
+      color: #333;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .left-panel ul li a:hover {
+      color: #ff7e5f;
+      transform: translateX(5px);
+    }
+
+    .left-panel .toggle-btn {
+      position: absolute;
+      top: 1rem;
+      right: -40px;
+      background: #ff7e5f;
+      color: white;
+      border: none;
+      padding: 0.6rem;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+      font-size: 1.3rem;
+      transition: background 0.3s ease;
+    }
+
+    .left-panel .toggle-btn:hover {
+      background: #feb47b;
+    }
+
+    .left-panel .copyright {
+      font-size: 0.8rem;
+      color: #555;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+      background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .main-content h1 {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      color: #ff7e5f;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      animation: slideIn 1s ease-in-out;
+    }
+
+    .button-container {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .button-container button {
+      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+      color: white;
+      border: none;
+      padding: 1.2rem 2.5rem;
+      border-radius: 15px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .button-container button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Sections (Methodologies, About Us, Contact Us) */
+    .section {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+      display: none; /* Hidden by default */
+      animation: fadeIn 0.5s ease-in-out;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      width: 80%; /* Added width to limit section size */
+      max-width: 800px; /* Added max-width for better readability */
+    }
+
+    .section h2 {
+      margin-bottom: 1.5rem;
+      color: #ff7e5f;
+      font-size: 2rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .section p {
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .section ul {
+      list-style: none;
+    }
+
+    .section ul li {
+      margin: 0.8rem 0;
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    .section ul li::before {
+      content: '➤';
+      color: #ff7e5f;
+      margin-right: 0.5rem;
+    }
+
+    /* Form Styling */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #ff7e5f;
+      box-shadow: 0 0 8px rgba(255, 126, 95, 0.3);
+    }
+
+    .form-group button {
+      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-group button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* File Input Styling */
+    #upload-form input[type="file"] {
+      margin-bottom: 1.5rem;
+    }
+
+    #upload-form button {
+      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    #upload-form button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Result Styling */
+    .result {
+      margin-top: 1.5rem;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #ff7e5f;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Left Panel -->
+  <div class="left-panel" id="left-panel">
+    <button class="toggle-btn" id="toggle-btn">✕</button>
+    <h2>Dashboard</h2>
+    <ul>
+      <li><a href="#" id="methodologies-link">Methodologies</a></li>
+      <li><a href="#" id="about-link">About Us</a></li>
+      <li><a href="#" id="contact-link">Contact Us</a></li>
+    </ul>
+
+    <!-- Copyright Section -->
+    <div class="copyright">
+      &copy; 2025 Blood Test Detection
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1>Digital Blood Group Detection</h1>
+    <div class="button-container">
+      <button id="registration-btn">New Registration</button>
+      <button id="prediction-btn">Predict Blood Group</button>
+    </div>
+
+    <!-- Methodologies Section -->
+    <div class="section" id="methodologies-section">
+      <h2>Methodologies</h2>
+      <p>Blood group detection using fingerprints through deep learning is an innovative approach that leverages advancements in image processing and machine learning to predict an individual’s blood group based on their fingerprint patterns. Traditional methods of blood group detection involve blood sample analysis, which can be invasive, time-consuming, and require specialized equipment. This novel methodology aims to provide a non-invasive, rapid, and accessible alternative by analyzing the unique features of fingerprints.</p>
+      <h3>Steps Involved</h3>
+      <ul>
+        <li>Dataset: Fingerprint</li>
+        <li>Data Preprocessing: Normalization with OpenCV</li>
+        <li>Training Model: CNN</li>
+        <li>Testing Model: CNN</li>
+        <li>Optimizer: Adam Optimizer</li>
+        <li>FrontEnd: Flask with Python</li>
+        <li>Backend: SQL Server</li>
+        <li>Accuracy: 98%</li>
+      </ul>
+    </div>
+
+    <!-- About Us Section -->
+    <div class="section" id="about-section">
+      <h2>About Us</h2>
+      <p>We provide accurate results in less time. Our team of experts ensures that you get the best service with cutting-edge technology and a user-friendly experience.</p>
+    </div>
+
+    <!-- Contact Us Section -->
+    <div class="section" id="contact-section">
+      <h2>Contact Us</h2>
+      <p>Phone: +91-1234567890</p>
+      <p>Email: contact@impritrace.com</p>
+      <p>Address: 123, ABC Street, Vizag, India</p>
+      <p>Customer Support: support@impritrace.com</p>
+      <p>Business Inquiries: business@impritrace.com</p>
+      <p>Working Hours: Mon - Fri, 9 AM - 6 PM IST</p>
+    </div>
+
+    <!-- Registration Section -->
+    <div class="section" id="registration-section">
+      <h2>New User Registration</h2>
+      <form id="register-form">
+        <div class="form-group">
+          <label for="name">Full Name:</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="age">Age:</label>
+          <input type="number" id="age" name="age" required>
+        </div>
+        <div class="form-group">
+          <label for="gender">Gender:</label>
+          <select id="gender" name="gender" required>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="dob">Date of Birth:</label>
+          <input type="date" id="dob" name="dob" required>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+    <!-- Prediction Section -->
+    <div class="section" id="prediction-section">
+      <h2>Upload Blood Sample</h2>
+      <form id="upload-form">
+        <input type="file" id="image" name="image" accept="image/*" required>
+        <button type="submit">Predict Blood Group</button>
+      </form>
+      <div class="result" id="prediction-result"></div>
+    </div>
+  </div>
+  <script>
+    // JavaScript for interactivity
+    const toggleBtn = document.getElementById('toggle-btn');
+    const leftPanel = document.getElementById('left-panel');
+    const registrationBtn = document.getElementById('registration-btn');
+    const predictionBtn = document.getElementById('prediction-btn');
+    const methodologiesLink = document.getElementById('methodologies-link');
+    const aboutLink = document.getElementById('about-link');
+    const contactLink = document.getElementById('contact-link');
+    const methodologiesSection = document.getElementById('methodologies-section');
+    const aboutSection = document.getElementById('about-section');
+    const contactSection = document.getElementById('contact-section');
+    const registrationSection = document.getElementById('registration-section');
+    const predictionSection = document.getElementById('prediction-section');
+
+    // Toggle Left Panel
+    toggleBtn.addEventListener('click', () => {
+      leftPanel.classList.toggle('collapsed');
+    });
+
+    // Function to hide all sections
+    function hideAllSections() {
+      methodologiesSection.style.display = 'none';
+      aboutSection.style.display = 'none';
+      contactSection.style.display = 'none';
+      registrationSection.style.display = 'none';
+      predictionSection.style.display = 'none';
+    }
+
+    // Show Methodologies Section
+    methodologiesLink.addEventListener('click', () => {
+      hideAllSections();
+      methodologiesSection.style.display = 'block';
+    });
+
+    // Show About Us Section
+    aboutLink.addEventListener('click', () => {
+      hideAllSections();
+      aboutSection.style.display = 'block';
+    });
+
+    // Show Contact Us Section
+    contactLink.addEventListener('click', () => {
+      hideAllSections();
+      contactSection.style.display = 'block';
+    });
+
+    // Show Registration Section
+    registrationBtn.addEventListener('click', () => {
+      hideAllSections();
+      registrationSection.style.display = 'block';
+    });
+
+    // Show Prediction Section
+    predictionBtn.addEventListener('click', () => {
+      hideAllSections();
+      predictionSection.style.display = 'block';
+    });
+
+    // Handle Registration Form Submission
+    document.getElementById('register-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Registration successful!');
+      registrationSection.style.display = 'none';
+    });
+
+    // Handle Prediction Form Submission
+    document.getElementById('upload-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const fileInput = document.getElementById('image');
+      if (fileInput.files.length > 0) {
+        const formData = new FormData();
+        formData.append('image', fileInput.files[0]);
+
+        try {
+          // Send the image to the backend
+          const response = await fetch('http://127.0.0.1:5000/predict', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to get prediction');
+          }
+
+          const data = await response.json();
+
+          // Display the prediction result
+          if (data.error) {
+            document.getElementById('prediction-result').innerHTML = `<span style='color:red'>Error: ${data.error}</span>`;
+          } else {
+            document.getElementById('prediction-result').innerHTML = `
+              Predicted Blood Group: <b>${data.blood_group}</b> <br>
+              Confidence Score: <b>${(data.confidence * 100).toFixed(2)}%</b>
+            `;
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          document.getElementById('prediction-result').innerHTML = `<span style='color:red'>Error: ${error.message}</span>`;
+        }
+      } else {
+        alert('Please upload an image.');
+      }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <style>
+    /* General Styles */
+    body {
+  font-family: Arial, sans-serif;
+  background: url('C:/Users/91812/Documents/final/images/home bg.jpg') no-repeat center center/cover;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+    /* Background Animation */
+    @keyframes moveBackground {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Login Container */
+    .login-container {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 320px;
+  text-align: center;
+  animation: float 4s ease-in-out infinite;
+}
+
+    /* Floating Animation */
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    /* Heading */
+    .login-container h2 {
+      margin-bottom: 20px;
+      color: #333;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    /* Input Fields */
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 14px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .login-container input[type="text"]:focus,
+    .login-container input[type="password"]:focus {
+      border-color: #6a11cb;
+      box-shadow: 0 0 8px rgba(106, 17, 203, 0.5);
+      outline: none;
+    }
+
+    /* Submit Button */
+    .login-container input[type="submit"] {
+      width: 100%;
+      padding: 12px;
+      background-color: #6a11cb;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .login-container input[type="submit"]:hover {
+      background-color: #2575fc;
+      transform: scale(1.05);
+    }
+
+    /* Error Message */
+    .error-message {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+      animation: shake 0.5s ease-in-out;
+    }
+
+    /* Shake Animation for Error */
+    @keyframes shake {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      25% {
+        transform: translateX(-10px);
+      }
+      50% {
+        transform: translateX(10px);
+      }
+      75% {
+        transform: translateX(-10px);
+      }
+    }
+
+    /* Sign Up Link */
+    .signup-link {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .signup-link a {
+      color: #6a11cb;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <input type="submit" value="Login">
+    </form>
+    <p id="errorMessage" class="error-message"></p>
+    <div class="signup-link">
+      Don't have an account? <a href="signup.html">Sign Up</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent form submission
+
+      // Get input values
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      // Simple validation (for demo purposes)
+      if (username === "admin" && password === "password123") {
+        alert('Login successful!');
+        // Redirect or perform other actions here
+      } else {
+        document.getElementById('errorMessage').textContent = 'Invalid username or password.';
+        document.getElementById('errorMessage').style.display = 'block';
+      }
+    });
+  </script>
+
+</body>
+</html>

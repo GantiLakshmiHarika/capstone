@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Sign UP</title>
+    <style>
+        /* General Styles */
+        body {
+            background: url('C:/Users/91812/Documents/final/images/room.jpg');
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        /* Background Animation */
+        @keyframes moveBackground {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Container */
+        .container {
+            width: 350px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: float 4s ease-in-out infinite;
+            position: relative;
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Heading */
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Input Fields */
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #6a11cb;
+            box-shadow: 0 0 8px rgba(106, 17, 203, 0.5);
+            outline: none;
+        }
+
+        /* Password Toggle */
+        .toggle-password {
+            cursor: pointer;
+            color: #6a11cb;
+            font-size: 16px;
+            margin-left: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-password:hover {
+            color: #2575fc;
+        }
+
+        /* Button */
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background-color: #6a11cb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2575fc;
+            transform: scale(1.05);
+        }
+
+        /* OTP Box */
+        .otp-box {
+            display: none;
+            margin-top: 20px;
+        }
+
+        /* Login Link */
+        .login-link {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .login-link a {
+            color: #6a11cb;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #2575fc;
+            text-decoration: underline;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            text-align: left;
+        }
+
+        /* OTP Display */
+        .otp-display {
+            position: absolute;
+            top: 20px;
+            right: -120px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            color: #333;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Sign up </h2>
+        <input type="text" id="username" placeholder="Enter Username">
+        
+        <div style="display: flex; align-items: center;">
+            <input type="password" id="password" placeholder="Enter Password">
+            <span class="toggle-password" onclick="togglePassword()">👁</span>
+        </div>
+        <p id="passwordError" class="error-message"></p>
+
+        <button onclick="validatePassword()">Send OTP</button>
+        
+        <div class="otp-box">
+            <input type="text" id="otpInput" placeholder="Enter OTP">
+            <button onclick="verifyOTP()">Verify OTP</button>
+        </div>
+
+        <div class="login-link">
+            Already have an account? <a href="login.html">Login</a>
+        </div>
+
+        <!-- OTP Display -->
+        <div class="otp-display" id="otpDisplay">
+            Your OTP: <span id="otpValue"></span>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        function togglePassword() {
+            let passwordInput = document.getElementById("password");
+            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+        }
+
+        // Password validation function
+        function validatePassword() {
+            const password = document.getElementById("password").value;
+            const passwordError = document.getElementById("passwordError");
+
+            // Regular expressions for validation
+            const minLength = 8;
+            const hasUpperCase = /[A-Z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+            // Check conditions
+            if (password.length < minLength) {
+                passwordError.textContent = "Password must be at least 8 characters long.";
+                return;
+            }
+            if (!hasUpperCase) {
+                passwordError.textContent = "Password must contain at least one uppercase letter.";
+                return;
+            }
+            if (!hasNumber) {
+                passwordError.textContent = "Password must contain at least one number.";
+                return;
+            }
+            if (!hasSpecialChar) {
+                passwordError.textContent = "Password must contain at least one special character.";
+                return;
+            }
+
+            // If all conditions are met
+            passwordError.textContent = "";
+            sendOTP();
+        }
+
+        // OTP functions
+        let generatedOTP;
+
+        function sendOTP() {
+            generatedOTP = Math.floor(1000 + Math.random() * 9000); // Generate 4-digit OTP
+            document.getElementById("otpValue").textContent = generatedOTP; // Display OTP
+            document.getElementById("otpDisplay").style.display = "block"; // Show OTP display
+            document.querySelector('.otp-box').style.display = 'block'; // Show OTP input box
+        }
+
+        function verifyOTP() {
+            let otpInput = document.getElementById("otpInput").value;
+            if (otpInput == generatedOTP) {
+                alert("Login Successful! Redirecting...");
+                window.location.href = "home.html";
+            } else {
+                alert("Incorrect OTP! Try again.");
+            }
+        }
+    </script>
+
+</body>
+</html>
